@@ -34,7 +34,7 @@ use std::{env, path::Path, process, vec};
 #[allow(unused_variables)]
 pub trait Application: Default + Sized + 'static {
     /// Application (sub)command which serves as the main entry point.
-    type Cmd: Command + Configurable<Self::Cfg>;
+    type Cmd: Command + Configurable<Self::Cfg> + clap::Parser;
 
     /// Configuration type used by this application.
     type Cfg: Config;
@@ -49,7 +49,7 @@ pub trait Application: Default + Sized + 'static {
         I: IntoIterator<Item = String>,
     {
         // Parse command line options
-        let command = Self::Cmd::from_args(args);
+        let command = Self::Cmd::parse_args(args);
 
         // Initialize application
         let mut app = Self::default();
